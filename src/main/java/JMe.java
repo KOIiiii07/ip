@@ -23,14 +23,23 @@ public class JMe {
         String userInput;
         Scanner in = new Scanner(System.in);
 
-        userInput = in.nextLine();
-        userInput.replace("\n", "");
-
-        while(!(userInput.toLowerCase().equals("bye")) ) {
-            System.out.println(horizontalLine + "\n" + userInput + "\n" + horizontalLine);
+        while (true) {
             userInput = in.nextLine();
+
+            // 1. Check for empty input (whitespace included)
+            if (userInput.trim().isEmpty()) {
+                throw new IllegalArgumentException("Input cannot be empty!");
+            }
+
+            // 2. Check for exit command
+            if (userInput.equalsIgnoreCase("bye")) {
+                byeUser();
+                break;
+            }
+
+            // 3. Echo the input
+            System.out.println(horizontalLine + "\n" + userInput + "\n" + horizontalLine);
         }
-        byeUser();
     }
 
     public static void main(String[] args) {
