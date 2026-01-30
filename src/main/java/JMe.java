@@ -3,8 +3,8 @@ import java.util.Scanner;
 public class JMe {
 
     // constants or formats or static variables
-    public static final String horizontalLine = "____________________________________________________________";
-    public static Task[] Tasks = new Task[100];
+    public static final String HORIZONTAL_LINE = "____________________________________________________________";
+    public static Task[] tasks = new Task[100];
     public static int itemCount = 0;
 
     public static void greetUser() {
@@ -14,16 +14,16 @@ public class JMe {
                 + " | |_| | |  | |  __/\n"
                 + "  \\___/|_|  |_|\\___|\n";
 
-        System.out.println(horizontalLine + "\nHello! I'm JMe!\n" + logo + "How may I assist you?\n" + horizontalLine);
+        System.out.println(HORIZONTAL_LINE + "\nHello! I'm JMe!\n" + logo + "How may I assist you?\n" + HORIZONTAL_LINE);
     }
 
     public static void byeUser() {
-        System.out.println(horizontalLine + "\nBye friend! See you soon!\n" + horizontalLine);
+        System.out.println(HORIZONTAL_LINE + "\nBye friend! See you soon!\n" + HORIZONTAL_LINE);
     }
 
-    public static Boolean isThereDuplicates(String userInput) {
+    public static boolean areThereDuplicates(String userInput) {
         for (int i = 0; i < itemCount; i++) {
-            if (Tasks[i].isEqual(userInput)) {
+            if (tasks[i].isEqual(userInput)) {
                 return true;
             }
         }
@@ -32,60 +32,60 @@ public class JMe {
 
     public static void addTask(String userInput) {
         // 1. Check if tasks is full using the counter
-        if (itemCount >= Tasks.length) {
-            System.out.println(horizontalLine + "\nThe list is full\n" + horizontalLine);
+        if (itemCount >= tasks.length) {
+            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
             return;
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
-        if (isThereDuplicates(userInput)) {
-            System.out.println(horizontalLine + "\nThere already exists such task.\n" + horizontalLine);
+        if (areThereDuplicates(userInput)) {
+            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
             return;
         }
 
         // 3. Store into list at the current index
-        Tasks[itemCount] = new Task(userInput);
+        tasks[itemCount] = new Task(userInput);
 
         // 4. Increment the counter so the next item goes to the next slot
         itemCount++;
 
-        System.out.println(horizontalLine + "\nAdded: " + userInput + "\n" + horizontalLine);
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + userInput + "\n" + HORIZONTAL_LINE);
     }
 
     public static void displayTasks() {
-        System.out.println(horizontalLine + "\nHere are your tasks:\n");
+        System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:\n");
         String doneMarker = "";
 
         // Only loop up to itemCount to avoid printing "null"
         for (int i = 0; i < itemCount; i++) {
-            doneMarker = (Tasks[i].isDone? "X" : " ");
-            System.out.println((i + 1) + ". " + "[" + doneMarker + "] "+ Tasks[i].description);
+            doneMarker = (tasks[i].isDone? "X" : " ");
+            System.out.println((i + 1) + ". " + "[" + doneMarker + "] "+ tasks[i].description);
         }
 
-        System.out.println(horizontalLine);
+        System.out.println(HORIZONTAL_LINE);
     }
 
     public static void markTask(int index) {
         if (index < 0 || index >= itemCount) {
-            System.out.println(horizontalLine + "\nSorry! The index is out-of-bound.\n" + horizontalLine);
+            System.out.println(HORIZONTAL_LINE + "\nSorry! The index is out-of-bound.\n" + HORIZONTAL_LINE);
             return;
         }
 
-        Tasks[index].isDone = true;
-        System.out.println(horizontalLine + "\nNice! I've marked this task as done:\n" + "  [X] " +
-                        Tasks[index].description + "\n" + horizontalLine);
+        tasks[index].isDone = true;
+        System.out.println(HORIZONTAL_LINE + "\nNice! I've marked this task as done:\n" + "  [X] " +
+                        tasks[index].description + "\n" + HORIZONTAL_LINE);
     }
 
     public static void unmarkTask(int index) {
         if (index < 0 || index >= itemCount) {
-            System.out.println(horizontalLine + "\nSorry! The index is out-of-bound.\n" + horizontalLine);
+            System.out.println(HORIZONTAL_LINE + "\nSorry! The index is out-of-bound.\n" + HORIZONTAL_LINE);
             return;
         }
 
-        Tasks[index].isDone = false;
-        System.out.println(horizontalLine + "\nOk! I've unmarked this task as done:\n" + "  [ ] " +
-                Tasks[index].description + "\n" + horizontalLine);
+        tasks[index].isDone = false;
+        System.out.println(HORIZONTAL_LINE + "\nOk! I've unmarked this task as done:\n" + "  [ ] " +
+                tasks[index].description + "\n" + HORIZONTAL_LINE);
     }
 
     public static void readUserInput() {
@@ -97,7 +97,7 @@ public class JMe {
             userInput = userInput.trim();
 
             if (userInput.isEmpty()) {
-                System.out.println(horizontalLine + "\nInput cannot be empty!\n" + horizontalLine);
+                System.out.println(HORIZONTAL_LINE + "\nInput cannot be empty!\n" + HORIZONTAL_LINE);
                 continue;
             }
 
@@ -124,8 +124,8 @@ public class JMe {
                         int index = Integer.parseInt(command[1]);
                         markTask(index - 1);
                     } catch (NumberFormatException e) {
-                        System.out.println(horizontalLine + "\nError: '" + command[1] + "' is not a valid number.\n"
-                                + horizontalLine);
+                        System.out.println(HORIZONTAL_LINE + "\nError: '" + command[1] + "' is not a valid number.\n"
+                                + HORIZONTAL_LINE);
                     }
                     break;
                 }
@@ -137,8 +137,8 @@ public class JMe {
                         int index = Integer.parseInt(command[1]);
                         unmarkTask(index - 1);
                     } catch (NumberFormatException e) {
-                        System.out.println(horizontalLine + "\nError: '" + command[1] + "' is not a valid number.\n"
-                        + horizontalLine);
+                        System.out.println(HORIZONTAL_LINE + "\nError: '" + command[1] + "' is not a valid number.\n"
+                        + HORIZONTAL_LINE);
                     }
                     break;
                 }
@@ -146,9 +146,9 @@ public class JMe {
                 default: {
                     // check whether the command is valid or the task description is descriptive.
                     if (command.length == 1 || command[1].isEmpty()) {
-                        System.out.println(horizontalLine + "\nInvalid Format\n");
-                        System.out.println("Command format: \"unmark/mark [number]\" or \"list\" or \"bye\".\n");
-                        System.out.println("Add task format: *two words minimum.*\n" + horizontalLine);
+                        System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
+                        System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
+                        System.out.println("Add task format: *two words minimum.*\n" + HORIZONTAL_LINE);
                     } else {
                         addTask(userInput);
                     }
