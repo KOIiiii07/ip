@@ -30,7 +30,7 @@ public class JMe {
         return false;
     }
 
-    public static void addTask(String userInput) {
+    public static void addTodo(String userInput) {
         // 1. Check if tasks is full using the counter
         if (itemCount >= tasks.length) {
             System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
@@ -45,22 +45,91 @@ public class JMe {
         }
 
         // 3. Store into list at the current index
-        tasks[itemCount] = new Task(userInput);
+        tasks[itemCount] = new Todo(userInput);
 
         // 4. Increment the counter so the next item goes to the next slot
         itemCount++;
 
-        System.out.println(HORIZONTAL_LINE + "\nAdded: " + userInput + "\n" + HORIZONTAL_LINE);
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+        System.out.printf("Now you have %d tasks in the list.%n", itemCount);
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    public static void addDeadline(String userInput) {
+        // 1. Check if tasks is full using the counter
+        if (itemCount >= tasks.length) {
+            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
+            return;
+        }
+
+        // 2. Check for duplicates
+        // We only loop up to 'itemCount' to avoid hitting null values
+        if (areThereDuplicates(userInput)) {
+            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
+            return;
+        }
+
+        // 3. Store into list at the current index
+        String[] deadline = userInput.split("/by", 2);
+
+        if (deadline.length != 2) {
+            System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"deadline __ /by __\"\n" + HORIZONTAL_LINE);
+            return;
+        }
+        String description = deadline[0].trim();
+        String dueTime = deadline[1].trim();
+        tasks[itemCount] = new Deadline(description, dueTime);
+
+        // 4. Increment the counter so the next item goes to the next slot
+        itemCount++;
+
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+        System.out.printf("Now you have %d tasks in the list.%n", itemCount);
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    public static void addEvent(String userInput) {
+        // 1. Check if tasks is full using the counter
+        if (itemCount >= tasks.length) {
+            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
+            return;
+        }
+
+        // 2. Check for duplicates
+        // We only loop up to 'itemCount' to avoid hitting null values
+        if (areThereDuplicates(userInput)) {
+            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
+            return;
+        }
+
+        // 3. Store into list at the current index
+        String[] event = userInput.split("/", 3);
+
+        // check the validity of the format
+        if (event.length != 3) {
+            System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"event __ /from __ /to __\"\n" + HORIZONTAL_LINE);
+            return;
+        }
+
+        String description = event[0].trim();
+        String startTime = event[1].replace("from" , "").trim();
+        String endTime = event[2].replace("to" , "").trim();
+        tasks[itemCount] = new Event(description, startTime, endTime);
+
+        // 4. Increment the counter so the next item goes to the next slot
+        itemCount++;
+
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+        System.out.printf("Now you have %d tasks in the list.%n", itemCount);
+        System.out.println(HORIZONTAL_LINE);
     }
 
     public static void displayTasks() {
-        System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:\n");
-        String doneMarker = "";
+        System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
 
         // Only loop up to itemCount to avoid printing "null"
         for (int i = 0; i < itemCount; i++) {
-            doneMarker = (tasks[i].isDone? "X" : " ");
-            System.out.println((i + 1) + ". " + "[" + doneMarker + "] "+ tasks[i].description);
+            System.out.println((i+1) + "." + tasks[i].toString());
         }
 
         System.out.println(HORIZONTAL_LINE);
@@ -73,8 +142,8 @@ public class JMe {
         }
 
         tasks[index].isDone = true;
-        System.out.println(HORIZONTAL_LINE + "\nNice! I've marked this task as done:\n" + "  [X] " +
-                        tasks[index].description + "\n" + HORIZONTAL_LINE);
+        System.out.println(HORIZONTAL_LINE + "\nNice! I've marked this task as done:\n" +
+                tasks[index].toString() + "\n" + HORIZONTAL_LINE);
     }
 
     public static void unmarkTask(int index) {
@@ -84,8 +153,8 @@ public class JMe {
         }
 
         tasks[index].isDone = false;
-        System.out.println(HORIZONTAL_LINE + "\nOk! I've unmarked this task as done:\n" + "  [ ] " +
-                tasks[index].description + "\n" + HORIZONTAL_LINE);
+        System.out.println(HORIZONTAL_LINE + "\nOk! I've unmarked this task as done:\n" +
+                tasks[index].toString() + "\n" + HORIZONTAL_LINE);
     }
 
     public static void readUserInput() {
@@ -143,15 +212,45 @@ public class JMe {
                     break;
                 }
 
+                case "todo": {
+                    if (command[1].trim().isEmpty()) {
+                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"todo __\"\n"
+                                + HORIZONTAL_LINE);
+                    } else {
+                        addTodo(command[1]);
+                    }
+                    break;
+                }
+
+                case "deadline": {
+                    if (command[1].trim().isEmpty()) {
+                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"deadline __ /by __\"\n"
+                                + HORIZONTAL_LINE);
+                    } else {
+                        addDeadline(command[1]);
+                    }
+                    break;
+                }
+
+                case "event": {
+                    if (command[1].trim().isEmpty()) {
+                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"event __ /from __ /to __\"\n"
+                                + HORIZONTAL_LINE);
+                    } else {
+                        addEvent(command[1]);
+                    }
+                    break;
+                }
+
                 default: {
                     // check whether the command is valid or the task description is descriptive.
-                    if (command.length == 1 || command[1].isEmpty()) {
-                        System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
-                        System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
-                        System.out.println("Add task format: *two words minimum.*\n" + HORIZONTAL_LINE);
-                    } else {
-                        addTask(userInput);
-                    }
+                    System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
+                    System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
+                    System.out.println("Add task format:");
+                    System.out.println("\"todo __\"");
+                    System.out.println("\"deadline __ /by __\"");
+                    System.out.println("\"event __ /from __ /to __\"");
+                    System.out.println(HORIZONTAL_LINE);
                     break;
                 }
 
