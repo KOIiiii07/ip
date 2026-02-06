@@ -4,10 +4,21 @@ public class JMe {
 
     // constants or formats or static variables
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
-    public static Task[] tasks = new Task[100];
+    public static final int MAX_TASKS = 100;
+    public static Task[] tasks = new Task[MAX_TASKS];
     public static int itemCount = 0;
 
-    public static void greetUser() {
+    private static void printInvalidFormatHelp() {
+        System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
+        System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
+        System.out.println("Add task format:");
+        System.out.println("\"todo __\"");
+        System.out.println("\"deadline __ /by __\"");
+        System.out.println("\"event __ /from __ /to __\"");
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    private static void greetUser() {
         String logo = "      _ __  __\n"
                 + "     | |  \\/  | ___\n"
                 + "  _  | | |\\/| |/ _ \\\n"
@@ -17,11 +28,15 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE + "\nHello! I'm JMe!\n" + logo + "How may I assist you?\n" + HORIZONTAL_LINE);
     }
 
-    public static void byeUser() {
+    private static void byeUser() {
         System.out.println(HORIZONTAL_LINE + "\nBye friend! See you soon!\n" + HORIZONTAL_LINE);
     }
 
-    public static boolean areThereDuplicates(String userInput) {
+    private static void printMessage (String message) {
+        System.out.println(HORIZONTAL_LINE + "\n" + message + "\n" + HORIZONTAL_LINE);
+    }
+
+    public static boolean isDuplicate(String userInput) {
         for (int i = 0; i < itemCount; i++) {
             if (tasks[i].isEqual(userInput)) {
                 return true;
@@ -30,17 +45,17 @@ public class JMe {
         return false;
     }
 
-    public static void addTodo(String userInput) {
+    private static void addTodo(String userInput) {
         // 1. Check if tasks is full using the counter
-        if (itemCount >= tasks.length) {
-            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
+        if (itemCount >= MAX_TASKS) {
+            printMessage("The list is full");
             return;
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
-        if (areThereDuplicates(userInput)) {
-            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
+        if (isDuplicate(userInput)) {
+            printMessage("There already exists such task.");
             return;
         }
 
@@ -55,17 +70,17 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    public static void addDeadline(String userInput) {
+    private static void addDeadline(String userInput) {
         // 1. Check if tasks is full using the counter
-        if (itemCount >= tasks.length) {
-            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
+        if (itemCount >= MAX_TASKS) {
+            printMessage("The list is full");
             return;
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
-        if (areThereDuplicates(userInput)) {
-            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
+        if (isDuplicate(userInput)) {
+            printMessage("There already exists such task.");
             return;
         }
 
@@ -73,7 +88,7 @@ public class JMe {
         String[] deadline = userInput.split("/by", 2);
 
         if (deadline.length != 2) {
-            System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"deadline __ /by __\"\n" + HORIZONTAL_LINE);
+            printMessage("Invalid format: \"deadline __ /by __\"");
             return;
         }
         String description = deadline[0].trim();
@@ -88,17 +103,17 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    public static void addEvent(String userInput) {
+    private static void addEvent(String userInput) {
         // 1. Check if tasks is full using the counter
-        if (itemCount >= tasks.length) {
-            System.out.println(HORIZONTAL_LINE + "\nThe list is full\n" + HORIZONTAL_LINE);
+        if (itemCount >= MAX_TASKS) {
+            printMessage("The list is full");
             return;
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
-        if (areThereDuplicates(userInput)) {
-            System.out.println(HORIZONTAL_LINE + "\nThere already exists such task.\n" + HORIZONTAL_LINE);
+        if (isDuplicate(userInput)) {
+            printMessage("There already exists such task.");
             return;
         }
 
@@ -107,7 +122,7 @@ public class JMe {
 
         // check the validity of the format
         if (event.length != 3) {
-            System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"event __ /from __ /to __\"\n" + HORIZONTAL_LINE);
+            printMessage("Invalid format: \"event __ /from __ /to __\"");
             return;
         }
 
@@ -124,7 +139,7 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    public static void displayTasks() {
+    private static void displayTasks() {
         System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
 
         // Only loop up to itemCount to avoid printing "null"
@@ -135,34 +150,69 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    public static void markTask(int index) {
-        if (index < 0 || index >= itemCount) {
-            System.out.println(HORIZONTAL_LINE + "\nSorry! The index is out-of-bound.\n" + HORIZONTAL_LINE);
-            return;
+    private static void updateTaskStatus(String arguments, boolean isDone) {
+        try {
+            int index = Integer.parseInt(arguments) - 1;
+            if (index < 0 || index >= itemCount) {
+                printMessage("Sorry! The index is out-of-bound.");
+                return;
+            }
+            tasks[index].setDone(isDone);
+            String msg = isDone ? "Nice! I've marked this task as done:" : "Ok! I've unmarked this task as done:";
+            printMessage(msg + "\n  " + tasks[index]);
+        } catch (NumberFormatException e) {
+            printMessage("Error: '" + arguments + "' is not a valid number.");
         }
-
-        tasks[index].isDone = true;
-        System.out.println(HORIZONTAL_LINE + "\nNice! I've marked this task as done:\n" +
-                tasks[index].toString() + "\n" + HORIZONTAL_LINE);
     }
 
-    public static void unmarkTask(int index) {
-        if (index < 0 || index >= itemCount) {
-            System.out.println(HORIZONTAL_LINE + "\nSorry! The index is out-of-bound.\n" + HORIZONTAL_LINE);
-            return;
-        }
+    private static void processCommand(String command, String arguments) {
+        switch (command) {
+            // check for displaying the to-do-list
+            case "list": {
+                displayTasks();
+                break;
+            }
 
-        tasks[index].isDone = false;
-        System.out.println(HORIZONTAL_LINE + "\nOk! I've unmarked this task as done:\n" +
-                tasks[index].toString() + "\n" + HORIZONTAL_LINE);
+            // check for marking command
+            case "mark": {
+                updateTaskStatus(arguments, true);
+                break;
+            }
+
+            // check for unmarking command
+            case "unmark": {
+                updateTaskStatus(arguments, false);
+                break;
+            }
+
+            case "todo": {
+                addTodo(arguments);
+                break;
+            }
+
+            case "deadline": {
+                addDeadline(arguments);
+                break;
+            }
+
+            case "event": {
+                addEvent(arguments);
+                break;
+            }
+
+            default: {
+                // check whether the command is valid or the task description is descriptive.
+                printInvalidFormatHelp();
+                break;
+            }
+        }
     }
 
-    public static void readUserInput() {
-        String userInput;
+    public static void runCommandInput() {
         Scanner in = new Scanner(System.in);
 
         while (true) {
-            userInput = in.nextLine();
+            String userInput = in.nextLine();
             userInput = userInput.trim();
 
             if (userInput.isEmpty()) {
@@ -170,96 +220,20 @@ public class JMe {
                 continue;
             }
 
-            String[] command = userInput.split("\\s", 2);
-            command[0] = command[0].toLowerCase().trim();
+            String[] parts = userInput.split("\\s", 2);
+            String command = parts[0].toLowerCase().trim();
+            String arguments = parts.length > 1? parts[1].trim() : "";
 
-            switch (command[0]) {
-                // check for exit command
-                case "bye": {
-                    byeUser();
-                    return;
-                }
-
-                // check for displaying the to-do-list
-                case "list": {
-                    displayTasks();
-                    break;
-                }
-
-                // check for marking command
-                case "mark": {
-                    //check whether the format is correct
-                    try {
-                        int index = Integer.parseInt(command[1]);
-                        markTask(index - 1);
-                    } catch (NumberFormatException e) {
-                        System.out.println(HORIZONTAL_LINE + "\nError: '" + command[1] + "' is not a valid number.\n"
-                                + HORIZONTAL_LINE);
-                    }
-                    break;
-                }
-
-                // check for unmarking command
-                case "unmark": {
-                    // check whether the format is correct
-                    try {
-                        int index = Integer.parseInt(command[1]);
-                        unmarkTask(index - 1);
-                    } catch (NumberFormatException e) {
-                        System.out.println(HORIZONTAL_LINE + "\nError: '" + command[1] + "' is not a valid number.\n"
-                        + HORIZONTAL_LINE);
-                    }
-                    break;
-                }
-
-                case "todo": {
-                    if (command[1].trim().isEmpty()) {
-                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"todo __\"\n"
-                                + HORIZONTAL_LINE);
-                    } else {
-                        addTodo(command[1]);
-                    }
-                    break;
-                }
-
-                case "deadline": {
-                    if (command[1].trim().isEmpty()) {
-                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"deadline __ /by __\"\n"
-                                + HORIZONTAL_LINE);
-                    } else {
-                        addDeadline(command[1]);
-                    }
-                    break;
-                }
-
-                case "event": {
-                    if (command[1].trim().isEmpty()) {
-                        System.out.println(HORIZONTAL_LINE + "\nInvalid format: \"event __ /from __ /to __\"\n"
-                                + HORIZONTAL_LINE);
-                    } else {
-                        addEvent(command[1]);
-                    }
-                    break;
-                }
-
-                default: {
-                    // check whether the command is valid or the task description is descriptive.
-                    System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
-                    System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
-                    System.out.println("Add task format:");
-                    System.out.println("\"todo __\"");
-                    System.out.println("\"deadline __ /by __\"");
-                    System.out.println("\"event __ /from __ /to __\"");
-                    System.out.println(HORIZONTAL_LINE);
-                    break;
-                }
-
+            if (command.equals("bye")) {
+                byeUser();
+                break;
             }
+            processCommand(command, arguments);
         }
     }
 
     public static void main(String[] args) {
         greetUser();
-        readUserInput();
+        runCommandInput();
     }
 }
