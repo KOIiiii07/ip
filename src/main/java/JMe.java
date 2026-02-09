@@ -9,12 +9,10 @@ public class JMe {
     public static int itemCount = 0;
 
     private static void printInvalidFormatHelp() {
-        System.out.println(HORIZONTAL_LINE + "\nInvalid Format\n");
-        System.out.println("Command format: \"unmark/mark (number)\" or \"list\" or \"bye\".\n");
-        System.out.println("Add task format:");
-        System.out.println("\"todo __\"");
-        System.out.println("\"deadline __ /by __\"");
-        System.out.println("\"event __ /from __ /to __\"");
+        System.out.println(HORIZONTAL_LINE + "\nINVALID FORMAT\n");
+        System.out.println("Command format: \n\"unmark/mark (number)\" \n\"list\" \n\"bye\".\n");
+        System.out.println("Add task format: \n\"todo (__)\" \n\"deadline (__) /by (__)\"" +
+                "\n\"event (__) /from (__) /to (__)\"");
         System.out.println(HORIZONTAL_LINE);
     }
 
@@ -32,7 +30,7 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE + "\nBye friend! See you soon!\n" + HORIZONTAL_LINE);
     }
 
-    private static void printMessage (String message) {
+    public static void printMessage (String message) {
         System.out.println(HORIZONTAL_LINE + "\n" + message + "\n" + HORIZONTAL_LINE);
     }
 
@@ -45,24 +43,28 @@ public class JMe {
         return false;
     }
 
-    private static void addTodo(String userInput) {
+    private static void addTodo(String userInput) throws JMeException.OutOfBounds, JMeException.InvalidFormat,
+            JMeException.Duplicates {
         // 1. Check if tasks is full using the counter
         if (itemCount >= MAX_TASKS) {
-            printMessage("The list is full");
-            return;
+            throw new JMeException.OutOfBounds();
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
         if (isDuplicate(userInput)) {
-            printMessage("There already exists such task.");
-            return;
+            throw new JMeException.Duplicates();
         }
 
-        // 3. Store into list at the current index
+        // 3. Check for empty input
+        if (userInput.isEmpty()) {
+            throw new JMeException.InvalidFormat();
+        }
+
+        // 4. Store into list at the current index
         tasks[itemCount] = new Todo(userInput);
 
-        // 4. Increment the counter so the next item goes to the next slot
+        // 5. Increment the counter so the next item goes to the next slot
         itemCount++;
 
         System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
@@ -70,27 +72,26 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    private static void addDeadline(String userInput) {
+    private static void addDeadline(String userInput) throws JMeException.OutOfBounds, JMeException.InvalidFormat,
+            JMeException.Duplicates {
         // 1. Check if tasks is full using the counter
         if (itemCount >= MAX_TASKS) {
-            printMessage("The list is full");
-            return;
+            throw new JMeException.OutOfBounds();
         }
 
         // 2. Check for duplicates
         // We only loop up to 'itemCount' to avoid hitting null values
         if (isDuplicate(userInput)) {
-            printMessage("There already exists such task.");
-            return;
+            throw new JMeException.Duplicates();
         }
 
         // 3. Store into list at the current index
         String[] deadline = userInput.split("/by", 2);
 
         if (deadline.length != 2) {
-            printMessage("Invalid format: \"deadline __ /by __\"");
-            return;
+            throw new JMeException.InvalidFormat();
         }
+
         String description = deadline[0].trim();
         String dueTime = deadline[1].trim();
         tasks[itemCount] = new Deadline(description, dueTime);
@@ -103,41 +104,40 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    private static void addEvent(String userInput) {
-        // 1. Check if tasks is full using the counter
-        if (itemCount >= MAX_TASKS) {
-            printMessage("The list is full");
-            return;
-        }
+    private static void addEvent(String userInput) throws JMeException.OutOfBounds, JMeException.InvalidFormat,
+            JMeException.Duplicates {
+            // 1. Check if tasks is full using the counter
+            if (itemCount >= MAX_TASKS) {
+                throw new JMeException.OutOfBounds();
+            }
 
-        // 2. Check for duplicates
-        // We only loop up to 'itemCount' to avoid hitting null values
-        if (isDuplicate(userInput)) {
-            printMessage("There already exists such task.");
-            return;
-        }
+            // 2. Check for duplicates
+            // We only loop up to 'itemCount' to avoid hitting null values
+            if (isDuplicate(userInput)) {
+                throw new JMeException.Duplicates();
+            }
 
-        // 3. Store into list at the current index
-        String[] event = userInput.split("/", 3);
+            String[] event = userInput.split("/", 3);
 
-        // check the validity of the format
-        if (event.length != 3) {
-            printMessage("Invalid format: \"event __ /from __ /to __\"");
-            return;
-        }
+            // check the validity of the format
+            if (event.length != 3) {
+                throw new JMeException.InvalidFormat();
+            }
 
-        String description = event[0].trim();
-        String startTime = event[1].replace("from" , "").trim();
-        String endTime = event[2].replace("to" , "").trim();
-        tasks[itemCount] = new Event(description, startTime, endTime);
+            // 3. Store into list at the current index
+            String description = event[0].trim();
+            String startTime = event[1].replace("from" , "").trim();
+            String endTime = event[2].replace("to" , "").trim();
+            tasks[itemCount] = new Event(description, startTime, endTime);
 
-        // 4. Increment the counter so the next item goes to the next slot
-        itemCount++;
+            // 4. Increment the counter so the next item goes to the next slot
+            itemCount++;
 
-        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
-        System.out.printf("Now you have %d tasks in the list.%n", itemCount);
-        System.out.println(HORIZONTAL_LINE);
+            System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+            System.out.printf("Now you have %d tasks in the list.%n", itemCount);
+            System.out.println(HORIZONTAL_LINE);
     }
+
 
     private static void displayTasks() {
         System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
@@ -150,19 +150,16 @@ public class JMe {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    private static void updateTaskStatus(String arguments, boolean isDone) {
-        try {
-            int index = Integer.parseInt(arguments) - 1;
-            if (index < 0 || index >= itemCount) {
-                printMessage("Sorry! The index is out-of-bound.");
-                return;
-            }
-            tasks[index].setDone(isDone);
-            String msg = isDone ? "Nice! I've marked this task as done:" : "Ok! I've unmarked this task as done:";
-            printMessage(msg + "\n  " + tasks[index]);
-        } catch (NumberFormatException e) {
-            printMessage("Error: '" + arguments + "' is not a valid number.");
+    private static void updateTaskStatus(String arguments, boolean isDone) throws JMeException.OutOfBounds {
+
+        int index = Integer.parseInt(arguments) - 1;
+        if (index < 0 || index >= itemCount) {
+            throw new JMeException.OutOfBounds();
         }
+        tasks[index].setDone(isDone);
+        String msg = isDone ? "Nice! I've marked this task as done:" : "Ok! I've unmarked this task as done:";
+        printMessage(msg + "\n  " + tasks[index]);
+
     }
 
     private static void processCommand(String command, String arguments) {
@@ -175,28 +172,64 @@ public class JMe {
 
             // check for marking command
             case "mark": {
-                updateTaskStatus(arguments, true);
+                try {
+                    updateTaskStatus(arguments, true);
+                } catch (NumberFormatException e) {
+                    printMessage("Error: '" + arguments + "' is not a valid number.");
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("Your index is out-of-bound.");
+                }
                 break;
             }
 
             // check for unmarking command
             case "unmark": {
-                updateTaskStatus(arguments, false);
+                try {
+                    updateTaskStatus(arguments, false);
+                } catch (NumberFormatException e) {
+                    printMessage("Error: '" + arguments + "' is not a valid number.");
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("Your index is out-of-bound.");
+                }
                 break;
             }
 
             case "todo": {
-                addTodo(arguments);
+                try {
+                    addTodo(arguments);
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("The list is full");
+                } catch (JMeException.Duplicates e) {
+                    printMessage("There already exists such task.");
+                } catch (JMeException.InvalidFormat e) {
+                    printMessage("Invalid format: \"todo (__) \"");
+                }
                 break;
             }
 
             case "deadline": {
-                addDeadline(arguments);
+                try {
+                    addDeadline(arguments);
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("The list is full");
+                } catch (JMeException.Duplicates e) {
+                    printMessage("There already exists such task.");
+                } catch (JMeException.InvalidFormat e) {
+                    printMessage("Invalid format: \"deadline (__) /by (__)\"");
+                }
                 break;
             }
 
             case "event": {
-                addEvent(arguments);
+                try {
+                    addEvent(arguments);
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("The list is full");
+                } catch (JMeException.Duplicates e) {
+                    printMessage("There already exists such task.");
+                } catch (JMeException.InvalidFormat e) {
+                    printMessage("Invalid format: \"event (__) /from (__) /to (__)\"");
+                }
                 break;
             }
 
@@ -216,7 +249,7 @@ public class JMe {
             userInput = userInput.trim();
 
             if (userInput.isEmpty()) {
-                System.out.println(HORIZONTAL_LINE + "\nInput cannot be empty!\n" + HORIZONTAL_LINE);
+                printMessage("Input cannot be empty.");
                 continue;
             }
 
@@ -228,6 +261,7 @@ public class JMe {
                 byeUser();
                 break;
             }
+
             processCommand(command, arguments);
         }
     }
