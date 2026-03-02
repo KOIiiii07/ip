@@ -6,18 +6,19 @@ import JMe.task.Task;
 import JMe.task.Todo;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class JMe {
 
     // constants or formats or static variables
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
     public static final int MAX_TASKS = 100;
-    public static Task[] tasks = new Task[MAX_TASKS];
+    public static ArrayList<Task> tasks = new ArrayList<>();
     public static int itemCount = 0;
 
     private static void printInvalidFormatHelp() {
         System.out.println(HORIZONTAL_LINE + "\nINVALID FORMAT\n");
-        System.out.println("Command format: \n\"unmark/mark (number)\" \n\"list\" \n\"bye\".\n");
+        System.out.println("Command format: \n\"unmark/mark (number)\" \n\"delete (number)\" \n\"list\" \n\"bye\".\n");
         System.out.println("Add task format: \n\"todo (__)\" \n\"deadline (__) /by (__)\"" +
                 "\n\"event (__) /from (__) /to (__)\"");
         System.out.println(HORIZONTAL_LINE);
@@ -43,7 +44,7 @@ public class JMe {
 
     public static boolean isDuplicate(String userInput) {
         for (int i = 0; i < itemCount; i++) {
-            if (tasks[i].isEqual(userInput)) {
+            if (tasks.get(i).isEqual(userInput)) {
                 return true;
             }
         }
@@ -69,12 +70,12 @@ public class JMe {
         }
 
         // 4. Store into list at the current index
-        tasks[itemCount] = new Todo(userInput);
+        tasks.add(new Todo(userInput));
 
         // 5. Increment the counter so the next item goes to the next slot
         itemCount++;
 
-        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
         System.out.printf("Now you have %d tasks in the list.%n", itemCount);
         System.out.println(HORIZONTAL_LINE);
     }
@@ -101,12 +102,12 @@ public class JMe {
 
         String description = deadline[0].trim();
         String dueTime = deadline[1].trim();
-        tasks[itemCount] = new Deadline(description, dueTime);
+        tasks.add(new Deadline(description, dueTime));
 
         // 4. Increment the counter so the next item goes to the next slot
         itemCount++;
 
-        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+        System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
         System.out.printf("Now you have %d tasks in the list.%n", itemCount);
         System.out.println(HORIZONTAL_LINE);
     }
@@ -135,12 +136,12 @@ public class JMe {
             String description = event[0].trim();
             String startTime = event[1].replace("from" , "").trim();
             String endTime = event[2].replace("to" , "").trim();
-            tasks[itemCount] = new Event(description, startTime, endTime);
+            tasks.add(new Event(description, startTime, endTime));
 
             // 4. Increment the counter so the next item goes to the next slot
             itemCount++;
 
-            System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks[itemCount-1].toString());
+            System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
             System.out.printf("Now you have %d tasks in the list.%n", itemCount);
             System.out.println(HORIZONTAL_LINE);
     }
@@ -151,7 +152,7 @@ public class JMe {
 
         // Only loop up to itemCount to avoid printing "null"
         for (int i = 0; i < itemCount; i++) {
-            System.out.println((i+1) + "." + tasks[i].toString());
+            System.out.println((i+1) + "." + tasks.get(i).toString());
         }
 
         System.out.println(HORIZONTAL_LINE);
@@ -163,10 +164,23 @@ public class JMe {
         if (index < 0 || index >= itemCount) {
             throw new JMeException.OutOfBounds();
         }
-        tasks[index].setDone(isDone);
+        tasks.get(index).setDone(isDone);
         String msg = isDone ? "Nice! I've marked this task as done:" : "Ok! I've unmarked this task as done:";
-        printMessage(msg + "\n  " + tasks[index]);
+        printMessage(msg + "\n  " + tasks.get(index).toString());
 
+    }
+
+    private static void deleteTask(String arguments) throws JMeException.OutOfBounds {
+
+        int index = Integer.parseInt(arguments) - 1;
+        if (index < 0 || index >= itemCount) {
+            throw new JMeException.OutOfBounds();
+        }
+        Task deletedTask = tasks.remove(index);
+        itemCount -= 1;
+        System.out.println(HORIZONTAL_LINE + "\nDeleted: " + deletedTask.toString());
+        System.out.printf("Now you have %d tasks in the list.%n", itemCount);
+        System.out.println(HORIZONTAL_LINE);
     }
 
     private static void processCommand(String command, String arguments) {
@@ -193,6 +207,18 @@ public class JMe {
             case "unmark": {
                 try {
                     updateTaskStatus(arguments, false);
+                } catch (NumberFormatException e) {
+                    printMessage("Error: '" + arguments + "' is not a valid number.");
+                } catch (JMeException.OutOfBounds e) {
+                    printMessage("Your index is out-of-bound.");
+                }
+                break;
+            }
+
+            //check for delete
+            case "delete": {
+                try {
+                    deleteTask(arguments);
                 } catch (NumberFormatException e) {
                     printMessage("Error: '" + arguments + "' is not a valid number.");
                 } catch (JMeException.OutOfBounds e) {
