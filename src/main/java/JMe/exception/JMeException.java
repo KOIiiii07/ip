@@ -1,3 +1,5 @@
+package JMe.exception;
+
 public class JMeException extends Exception{
 
     public JMeException() {

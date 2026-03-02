@@ -1,3 +1,10 @@
+package JMe;
+import JMe.exception.JMeException;
+import JMe.task.Deadline;
+import JMe.task.Event;
+import JMe.task.Task;
+import JMe.task.Todo;
+
 import java.util.Scanner;
 
 public class JMe {
