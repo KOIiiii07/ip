@@ -195,6 +195,7 @@ public class JMe {
         }
         Task deletedTask = tasks.remove(index);
         itemCount -= 1;
+        Storage.save(tasks);
         System.out.println(HORIZONTAL_LINE + "\nDeleted: " + deletedTask.toString());
         System.out.printf("Now you have %d tasks in the list.%n", itemCount);
         System.out.println(HORIZONTAL_LINE);
