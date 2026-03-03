@@ -1,0 +1,4 @@
+T | 1 | work on yourself
+T | 0 | cs2113
+D | 0 | cs2113 | friday
+E | 0 | cg2028 | 1pm | 5pm

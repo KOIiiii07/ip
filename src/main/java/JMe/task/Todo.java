@@ -5,8 +5,13 @@ public class Todo extends Task{
         super(description);
     }
 
+    @Override
+    public String toFileString() {
+        return "T | " + (this.isDone? "1 | " : "0 | ") + this.description;
+    }
+
     public String toString() {
         String doneMarker = (this.isDone ? "X" : " ");
-        return "[T]" + "[" + doneMarker + "] " + description;
+        return "[T]" + "[" + doneMarker + "] " + this.description;
     }
 }

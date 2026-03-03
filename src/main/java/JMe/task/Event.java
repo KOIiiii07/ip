@@ -11,7 +11,7 @@ public class Event extends Task{
     }
 
     public String getStartTime(){
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(String startTime){
@@ -28,7 +28,14 @@ public class Event extends Task{
 
     public String toString() {
         String doneMarker = (this.isDone? "X" : " ");
-        return "[E]" + "[" + doneMarker + "] " + description + " (from: " + startTime + " to: " + endTime + ")";
+        return "[E]" + "[" + doneMarker + "] " + this.description + " (from: " + this.startTime + " to: "
+                + this.endTime + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "E | " + (this.isDone? "1 | " : "0 | ") + this.description + " | " + this.startTime + " | " +
+                this.endTime;
     }
 
     @Override

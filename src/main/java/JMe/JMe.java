@@ -4,7 +4,10 @@ import JMe.task.Deadline;
 import JMe.task.Event;
 import JMe.task.Task;
 import JMe.task.Todo;
+import JMe.storage.Storage;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -75,6 +78,9 @@ public class JMe {
         // 5. Increment the counter so the next item goes to the next slot
         itemCount++;
 
+        // 6. Save
+        Storage.save(tasks);
+
         System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
         System.out.printf("Now you have %d tasks in the list.%n", itemCount);
         System.out.println(HORIZONTAL_LINE);
@@ -106,6 +112,9 @@ public class JMe {
 
         // 4. Increment the counter so the next item goes to the next slot
         itemCount++;
+
+        //5. Save
+        Storage.save(tasks);
 
         System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
         System.out.printf("Now you have %d tasks in the list.%n", itemCount);
@@ -141,6 +150,9 @@ public class JMe {
             // 4. Increment the counter so the next item goes to the next slot
             itemCount++;
 
+            // 5. Save
+            Storage.save(tasks);
+
             System.out.println(HORIZONTAL_LINE + "\nAdded: " + tasks.get(itemCount-1).toString());
             System.out.printf("Now you have %d tasks in the list.%n", itemCount);
             System.out.println(HORIZONTAL_LINE);
@@ -148,6 +160,11 @@ public class JMe {
 
 
     private static void displayTasks() {
+        if (tasks.isEmpty()) {
+            printMessage("No tasks in the list");
+            return;
+        }
+
         System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
 
         // Only loop up to itemCount to avoid printing "null"
@@ -165,9 +182,9 @@ public class JMe {
             throw new JMeException.OutOfBounds();
         }
         tasks.get(index).setDone(isDone);
+        Storage.save(tasks);
         String msg = isDone ? "Nice! I've marked this task as done:" : "Ok! I've unmarked this task as done:";
         printMessage(msg + "\n  " + tasks.get(index).toString());
-
     }
 
     private static void deleteTask(String arguments) throws JMeException.OutOfBounds {
@@ -299,7 +316,9 @@ public class JMe {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Storage.load(tasks); //load stored file
+        itemCount = tasks.size(); //update itemCount
         greetUser();
         runCommandInput();
     }

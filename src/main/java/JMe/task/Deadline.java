@@ -9,7 +9,7 @@ public class Deadline extends Task{
     }
 
     public String getBy(){
-        return dueTime;
+        return this.dueTime;
     }
 
     public void setBy(String by){
@@ -18,7 +18,12 @@ public class Deadline extends Task{
 
     public String toString() {
         String doneMarker = (this.isDone? "X" : " ");
-        return "[D]" + "[" + doneMarker + "] " + description + " (by: " + dueTime + ")";
+        return "[D]" + "[" + doneMarker + "] " + this.description + " (by: " + this.dueTime + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "D | " + (this.isDone? "1 | " : "0 | ") + this.description + " | " + this.dueTime;
     }
 
     @Override

@@ -17,6 +17,8 @@ public class Task {
         this.isDone = isDone;
     }
 
+    public String toFileString() {return this.description;}
+
     public boolean isEqual(String task) {
         return (this.description.equals(task));
     }
