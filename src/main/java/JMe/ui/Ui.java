@@ -38,7 +38,8 @@ public class Ui {
 
     public static void printInvalidFormatHelp() {
         printMessage("INVALID FORMAT\n"
-                + "Command format: \n\"unmark/mark (number)\" \n\"delete (number)\" \n\"list\" \n\"bye\".\n\n"
+                + "Command format: \n\"unmark/mark (number)\" \n\"delete (number)\" \n\"list\" \n" +
+                "\"bye\".\n\"find (__)\".\n\n"
                 + "Add task format: \n\"todo (__)\" \n\"deadline (__) /by (__)\""
                 + "\n\"event (__) /from (__) /to (__)\"");
     }
@@ -60,6 +61,14 @@ public class Ui {
 
     public static void printTaskList(ArrayList<Task> tasks, int taskCount) {
         System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println((i+1) + "." + tasks.get(i).toString());
+        }
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    public static void printFindTasks(ArrayList<Task> tasks, int taskCount) {
+        System.out.println(HORIZONTAL_LINE + "\nHere are your matching tasks:");
         for (int i = 0; i < taskCount; i++) {
             System.out.println((i+1) + "." + tasks.get(i).toString());
         }

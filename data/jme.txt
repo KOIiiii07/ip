@@ -1,4 +1,3 @@
 T | 0 | work on myself
-D | 0 | cs2113 ip | friday
-E | 0 | cg2271 midterms | next wed 12pm | 2pm
-T | 0 | cs2113 ip
+D | 1 | cs2113 | fri
+E | 1 | quant preparation | now | graduation

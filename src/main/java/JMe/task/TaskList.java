@@ -116,4 +116,18 @@ public class TaskList {
         task.setDone(isDone);
         return task;
     }
+
+    public ArrayList<Task> findTasks(String keyword) throws JMeException.InvalidFormat {
+        if (keyword.isEmpty()) {
+            throw new JMeException.InvalidFormat();
+        }
+        ArrayList<Task> results = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            Task task = tasks.get(i);
+            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(task);
+            }
+        }
+        return results;
+    }
 }

@@ -24,6 +24,7 @@ public class Parser {
             case "todo"     -> new TodoCommand(arguments);
             case "deadline" -> new DeadlineCommand(arguments);
             case "event"    -> new EventCommand(arguments);
+            case "find"   -> new FindCommand(arguments);
             default         -> new InvalidCommand();
         };
     }

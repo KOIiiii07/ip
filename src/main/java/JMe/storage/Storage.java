@@ -49,9 +49,14 @@ public class Storage {
         Scanner s = new Scanner(file);
         while (s.hasNextLine()) {
             String line = s.nextLine();
-            Task task = fromFileString(line);
-            if (task != null) {
-                tasks.add(task);
+            try {
+                Task task = fromFileString(line);
+                if (task != null) {
+                    tasks.add(task);
+                }
+            } catch (Exception e) {
+                // Skip malformed lines instead of crashing
+                System.out.println("Skipping corrupted line: " + line);
             }
         }
         s.close();
