@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private static final String FILE_PATH = "./data/jme.txt";
+    private String filePath;
 
-    private static Task fromFileString(String line) {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    private Task fromFileString(String line) {
         String[] parts = line.split(" \\| ");
         boolean isDone = parts[1].equals("1");
         Task task = switch (parts[0]) {
@@ -32,37 +36,32 @@ public class Storage {
         return task;
     }
 
-    public static void load(ArrayList<Task> tasks) {
-        File file = new File(FILE_PATH);
+    public ArrayList<Task> load() throws IOException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        File file = new File(filePath);
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                System.out.println("Error loading: " + e.getMessage());
-            }
-            return;
+            file.createNewFile();
+            return tasks;
         }
 
-        try {
-            Scanner s = new Scanner(file);
-
-            while (s.hasNextLine()) {
-                String line = s.nextLine();
-                Task task = fromFileString(line);
-                if (task != null) {
-                    tasks.add(task);
-                }
+        Scanner s = new Scanner(file);
+        while (s.hasNextLine()) {
+            String line = s.nextLine();
+            Task task = fromFileString(line);
+            if (task != null) {
+                tasks.add(task);
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error loading: " + e.getMessage());
         }
+        s.close();
+
+        return tasks;
     }
 
-    public static void save(ArrayList<Task> tasks) {
+    public void save(ArrayList<Task> tasks) {
         try {
-            FileWriter fw = new FileWriter(FILE_PATH);
+            FileWriter fw = new FileWriter(filePath);
             for (Task task : tasks) {
                 fw.write(task.toFileString() + System.lineSeparator());
             }

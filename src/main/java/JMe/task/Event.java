@@ -26,6 +26,7 @@ public class Event extends Task{
         this.endTime = endTime;
     }
 
+    @Override
     public String toString() {
         String doneMarker = (this.isDone? "X" : " ");
         return "[E]" + "[" + doneMarker + "] " + this.description + " (from: " + this.startTime + " to: "

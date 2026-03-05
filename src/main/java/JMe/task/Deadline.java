@@ -16,6 +16,7 @@ public class Deadline extends Task{
         this.dueTime = dueTime;
     }
 
+    @Override
     public String toString() {
         String doneMarker = (this.isDone? "X" : " ");
         return "[D]" + "[" + doneMarker + "] " + this.description + " (by: " + this.dueTime + ")";

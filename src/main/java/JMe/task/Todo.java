@@ -10,6 +10,7 @@ public class Todo extends Task{
         return "T | " + (this.isDone? "1 | " : "0 | ") + this.description;
     }
 
+    @Override
     public String toString() {
         String doneMarker = (this.isDone ? "X" : " ");
         return "[T]" + "[" + doneMarker + "] " + this.description;

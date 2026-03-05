@@ -1,4 +1,4 @@
-T | 1 | work on yourself
-T | 0 | cs2113
-D | 0 | cs2113 | friday
-E | 0 | cg2028 | 1pm | 5pm
+T | 0 | work on myself
+D | 0 | cs2113 ip | friday
+E | 0 | cg2271 midterms | next wed 12pm | 2pm
+T | 0 | cs2113 ip

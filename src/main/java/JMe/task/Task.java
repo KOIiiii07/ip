@@ -1,6 +1,6 @@
 package JMe.task;
 
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -9,13 +9,15 @@ public class Task {
         this.isDone = false;
     }
 
-    public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
-    }
-
     public void setDone(boolean isDone) {
         this.isDone = isDone;
     }
+
+    public boolean getStatus() {
+        return this.isDone;
+    }
+
+    public abstract String toString();
 
     public String toFileString() {return this.description;}
 
