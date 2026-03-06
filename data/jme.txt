@@ -1,3 +1,2 @@
 T | 0 | work on myself
-D | 1 | cs2113 | fri
-E | 1 | quant preparation | now | graduation
+E | 0 | quant preparation | now | graduation

@@ -1,30 +1,41 @@
 package JMe.task;
 
-public class Deadline extends Task{
-    protected String dueTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-    public Deadline(String description, String dueTime) {
+public class Deadline extends Task{
+    private static final DateTimeFormatter INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private static final DateTimeFormatter DISPLAY_FORMAT =
+            DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+
+    protected LocalDateTime dueTime;
+
+    public Deadline(String description, String dueTimeStr) {
+        super(description);
+        this.dueTime = LocalDateTime.parse(dueTimeStr.trim(), INPUT_FORMAT);
+    }
+
+    public Deadline(String description, LocalDateTime dueTime) {
         super(description);
         this.dueTime = dueTime;
     }
 
-    public String getBy(){
+    public LocalDateTime getBy(){
         return this.dueTime;
-    }
-
-    public void setBy(String by){
-        this.dueTime = dueTime;
     }
 
     @Override
     public String toString() {
         String doneMarker = (this.isDone? "X" : " ");
-        return "[D]" + "[" + doneMarker + "] " + this.description + " (by: " + this.dueTime + ")";
+        return "[D]" + "[" + doneMarker + "] " + this.description + " (by: "
+                + this.dueTime.format(DISPLAY_FORMAT) + ")";
     }
 
     @Override
     public String toFileString() {
-        return "D | " + (this.isDone? "1 | " : "0 | ") + this.description + " | " + this.dueTime;
+        return "D | " + (this.isDone? "1 | " : "0 | ") + this.description + " | " + this.dueTime.format(DISPLAY_FORMAT);
     }
 
     @Override
@@ -33,8 +44,13 @@ public class Deadline extends Task{
         if (deadline.length != 2) {
             return false;
         }
-        String description = deadline[0].trim();
-        String dueTime = deadline[1].trim();
-        return (this.description.equals(description) & this.dueTime.equals(dueTime));
+
+        try {
+            String description = deadline[0].trim();
+            LocalDateTime dueTime = LocalDateTime.parse(deadline[1].trim(), INPUT_FORMAT) ;
+            return (this.description.equals(description) & this.dueTime.equals(dueTime));
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }
