@@ -2,6 +2,7 @@ package JMe.task;
 
 import JMe.exception.JMeException;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class TaskList {
@@ -70,10 +71,15 @@ public class TaskList {
 
         String description = deadline[0].trim();
         String dueTime = deadline[1].trim();
-        Task task = new Deadline(description, dueTime);
-        tasks.add(task);
-        taskCount++;
-        return task;
+
+        try {
+            Task task = new Deadline(description, dueTime);
+            tasks.add(task);
+            taskCount++;
+            return task;
+        } catch (DateTimeParseException e) {
+            throw new JMeException.InvalidFormat();
+        }
     }
 
     public Task addEvent(String userInput) throws JMeException.OutOfBounds,

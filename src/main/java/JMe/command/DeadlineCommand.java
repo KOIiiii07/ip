@@ -24,7 +24,7 @@ public class DeadlineCommand extends Command {
         } catch (JMeException.Duplicates e) {
             Ui.printMessage("There already exists such task.");
         } catch (JMeException.InvalidFormat e) {
-            Ui.printMessage("Invalid format: \"deadline (__) /by (__)\"");
+            Ui.printMessage("Invalid format: \"deadline (__) /by (yyyy-MM-dd HHmm)\"");
         }
     }
 }

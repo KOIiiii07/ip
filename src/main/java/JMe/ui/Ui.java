@@ -40,7 +40,7 @@ public class Ui {
         printMessage("INVALID FORMAT\n"
                 + "Command format: \n\"unmark/mark (number)\" \n\"delete (number)\" \n\"list\" \n" +
                 "\"bye\".\n\"find (__)\".\n\n"
-                + "Add task format: \n\"todo (__)\" \n\"deadline (__) /by (__)\""
+                + "Add task format: \n\"todo (__)\" \n\"deadline (__) /by (yyyy-MM-dd HHmm)\""
                 + "\n\"event (__) /from (__) /to (__)\"");
     }
 
