@@ -6,10 +6,19 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to mark or unmark a task as done.
+ */
 public class MarkCommand extends Command {
     private String arguments;
     private boolean isDone;
 
+    /**
+     * Constructs a MarkCommand with the given arguments and desired status.
+     *
+     * @param arguments The 1-based index of the task, as a string.
+     * @param isDone    {@code true} to mark as done, {@code false} to unmark.
+     */
     public MarkCommand(String arguments, boolean isDone) {
         this.arguments = arguments;
         this.isDone = isDone;

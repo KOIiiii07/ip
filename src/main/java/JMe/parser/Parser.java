@@ -2,8 +2,20 @@ package JMe.parser;
 
 import JMe.command.*;
 
+/**
+ * Parses user input strings and returns the corresponding Command object.
+ */
 public class Parser {
 
+    /**
+     * Parses the given user input and returns the appropriate Command.
+     * The first word of the input is treated as the command keyword
+     * (case-insensitive), and any remaining text is passed as arguments.
+     *
+     * @param userInput The full user input string.
+     * @return The Command corresponding to the user's input,
+     *         or an InvalidCommand if the input is not recognised.
+     */
     public static Command parse(String userInput) {
         userInput = userInput.trim();
 

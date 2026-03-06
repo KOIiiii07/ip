@@ -1,6 +1,15 @@
 package JMe.task;
 
+/**
+ * Represents a todo task with no associated date or time.
+ */
 public class Todo extends Task{
+
+    /**
+     * Constructs a Todo with the given description.
+     *
+     * @param description Description of the todo.
+     */
     public Todo(String description) {
         super(description);
     }

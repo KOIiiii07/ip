@@ -1,27 +1,57 @@
 package JMe.task;
 
+/**
+ * Represents an event task that spans a time range with a start and end time.
+ */
 public class Event extends Task{
     protected String startTime;
     protected String endTime;
 
+    /**
+     * Constructs an Event with the given description, start time, and end time.
+     *
+     * @param description Description of the event.
+     * @param startTime   Start time of the event.
+     * @param endTime     End time of the event.
+     */
     public Event(String description, String startTime, String endTime) {
         super(description);
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
+    /**
+     * Returns the start time of this event.
+     *
+     * @return The start time string.
+     */
     public String getStartTime(){
         return this.startTime;
     }
 
+    /**
+     * Sets the start time of this event.
+     *
+     * @param startTime The new start time.
+     */
     public void setStartTime(String startTime){
         this.startTime = startTime;
     }
 
+    /**
+     * Returns the end time of this event.
+     *
+     * @return The end time string.
+     */
     public String getEndTime(){
         return endTime;
     }
 
+    /**
+     * Sets the end time of this event.
+     *
+     * @param endTime The new end time.
+     */
     public void setEndTime(String endTime){
         this.endTime = endTime;
     }
@@ -39,6 +69,11 @@ public class Event extends Task{
                 this.endTime;
     }
 
+    /**
+     * {@inheritDoc}
+     * Compares by splitting the user input around {@code /} delimiters and
+     * checking description, start time, and end time.
+     */
     @Override
     public boolean isEqual(String userInput) {
         String[] event = userInput.split("/", 3);

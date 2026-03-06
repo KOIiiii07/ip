@@ -8,9 +8,17 @@ import JMe.ui.Ui;
 
 import java.util.ArrayList;
 
+/**
+ * Command to search for tasks containing a given keyword.
+ */
 public class FindCommand extends Command {
     private String keyword;
 
+    /**
+     * Constructs a FindCommand with the given search keyword.
+     *
+     * @param keyword The keyword to search for in task descriptions.
+     */
     public FindCommand(String keyword) {
         this.keyword = keyword;
     }

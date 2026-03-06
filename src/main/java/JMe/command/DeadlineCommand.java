@@ -6,9 +6,17 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to add a new Deadline task.
+ */
 public class DeadlineCommand extends Command {
     private String arguments;
 
+    /**
+     * Constructs a DeadlineCommand with the given arguments.
+     *
+     * @param arguments The raw input containing the description and due date.
+     */
     public DeadlineCommand(String arguments) {
         this.arguments = arguments;
     }

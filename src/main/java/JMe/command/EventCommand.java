@@ -6,9 +6,17 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to add a new Event task.
+ */
 public class EventCommand extends Command {
     private String arguments;
 
+    /**
+     * Constructs an EventCommand with the given arguments.
+     *
+     * @param arguments The raw input containing the description, start time, and end time.
+     */
     public EventCommand(String arguments) {
         this.arguments = arguments;
     }

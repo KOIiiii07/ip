@@ -6,9 +6,17 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to delete a task by its displayed index.
+ */
 public class DeleteCommand extends Command {
     private String arguments;
 
+    /**
+     * Constructs a DeleteCommand with the given arguments.
+     *
+     * @param arguments The 1-based index of the task to delete, as a string.
+     */
     public DeleteCommand(String arguments) {
         this.arguments = arguments;
     }

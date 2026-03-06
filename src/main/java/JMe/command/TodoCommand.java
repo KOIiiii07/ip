@@ -6,13 +6,28 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to add a new Todo task.
+ */
 public class TodoCommand extends Command {
     private String arguments;
 
+    /**
+     * Constructs a TodoCommand with the given arguments.
+     *
+     * @param arguments The description of the todo task.
+     */
     public TodoCommand(String arguments) {
         this.arguments = arguments;
     }
 
+    /**
+     * Executes the command by adding a todo task to the list and saving.
+     *
+     * @param tasks   The task list to add the todo task.
+     * @param ui      The UI component (unused directly).
+     * @param storage The storage component for persisting the updated list.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {

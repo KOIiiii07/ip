@@ -4,6 +4,9 @@ import JMe.task.TaskList;
 import JMe.storage.Storage;
 import JMe.ui.Ui;
 
+/**
+ * Command to display all tasks in the task list.
+ */
 public class ListCommand extends Command {
 
     @Override
