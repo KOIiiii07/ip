@@ -1,4 +1,4 @@
-package JMe.exception;
+package jme.exception;
 
 /**
  * Base exception class for JMe-specific errors.

@@ -1,9 +1,10 @@
-package JMe.storage;
+package jme.storage;
 
-import JMe.task.Task;
-import JMe.task.Todo;
-import JMe.task.Event;
-import JMe.task.Deadline;
+import jme.task.Task;
+import jme.task.Todo;
+import jme.task.Event;
+import jme.task.Deadline;
+import jme.ui.Ui;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -70,9 +71,9 @@ public class Storage {
             return tasks;
         }
 
-        Scanner s = new Scanner(file);
-        while (s.hasNextLine()) {
-            String line = s.nextLine();
+        Scanner fileScanner = new Scanner(file);
+        while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine();
             try {
                 Task task = fromFileString(line);
                 if (task != null) {
@@ -80,10 +81,10 @@ public class Storage {
                 }
             } catch (Exception e) {
                 // Skip malformed lines instead of crashing
-                System.out.println("Skipping corrupted line: " + line);
+                Ui.printMessage("Skipping corrupted line: " + line);
             }
         }
-        s.close();
+        fileScanner.close();
 
         return tasks;
     }
@@ -95,13 +96,13 @@ public class Storage {
      */
     public void save(ArrayList<Task> tasks) {
         try {
-            FileWriter fw = new FileWriter(filePath);
+            FileWriter fileWriter = new FileWriter(filePath);
             for (Task task : tasks) {
-                fw.write(task.toFileString() + System.lineSeparator());
+                fileWriter.write(task.toFileString() + System.lineSeparator());
             }
-            fw.close();
+            fileWriter.close();
         } catch (IOException e) {
-            System.out.println("Error saving: " + e.getMessage());
+            Ui.printMessage("Error saving: " + e.getMessage());
         }
     }
 }

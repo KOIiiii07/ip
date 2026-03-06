@@ -1,8 +1,8 @@
-package JMe.command;
+package jme.command;
 
-import JMe.task.TaskList;
-import JMe.storage.Storage;
-import JMe.ui.Ui;
+import jme.task.TaskList;
+import jme.storage.Storage;
+import jme.ui.Ui;
 
 /**
  * Abstract base class for all JMe commands.

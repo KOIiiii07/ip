@@ -1,15 +1,14 @@
-package JMe.task;
+package jme.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  * Represents a task with a deadline (due date and time).
  * Accepts date-time input in {@code yyyy-MM-dd HHmm} format and
  * displays it in {@code MMM dd yyyy, h:mma} format.
  */
-public class Deadline extends Task{
+public class Deadline extends Task {
     private static final DateTimeFormatter INPUT_FORMAT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter DISPLAY_FORMAT =
@@ -22,7 +21,6 @@ public class Deadline extends Task{
      *
      * @param description Description of the deadline task.
      * @param dueTimeStr  Due date-time string in {@code yyyy-MM-dd HHmm} format.
-     * @throws DateTimeParseException If {@code dueTimeStr} is not in the expected format.
      */
     public Deadline(String description, String dueTimeStr) {
         super(description);
@@ -63,22 +61,15 @@ public class Deadline extends Task{
 
     /**
      * {@inheritDoc}
-     * Compares by parsing the user input string around the {@code /by} delimiter
-     * and checking both description and due time.
+     * Two deadlines are equal if they share the same description and due time.
      */
     @Override
-    public boolean isEqual(String userInput) {
-        String[] deadline = userInput.split("/by", 2);
-        if (deadline.length != 2) {
+    public boolean isEqual(Task other) {
+        if (!(other instanceof Deadline)) {
             return false;
         }
-
-        try {
-            String description = deadline[0].trim();
-            LocalDateTime dueTime = LocalDateTime.parse(deadline[1].trim(), INPUT_FORMAT) ;
-            return (this.description.equals(description) & this.dueTime.equals(dueTime));
-        } catch (DateTimeParseException e) {
-            return false;
-        }
+        Deadline otherDeadline = (Deadline) other;
+        return this.description.equals(otherDeadline.description)
+                && this.dueTime.equals(otherDeadline.dueTime);
     }
 }

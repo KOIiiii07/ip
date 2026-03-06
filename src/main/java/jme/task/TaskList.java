@@ -1,6 +1,6 @@
-package JMe.task;
+package jme.task;
 
-import JMe.exception.JMeException;
+import jme.exception.JMeException;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -53,14 +53,14 @@ public class TaskList {
     }
 
     /**
-     * Checks whether a task matching the given user input already exists in the list.
+     * Checks whether a task with the same fields already exists in the list.
      *
-     * @param userInput The user input string to check against existing tasks.
-     * @return status if a duplicate is found
+     * @param newTask The task to check against existing tasks.
+     * @return {@code true} if a duplicate is found.
      */
-    public boolean isDuplicate(String userInput) {
+    public boolean isDuplicate(Task newTask) {
         for (int i = 0; i < taskCount; i++) {
-            if (tasks.get(i).isEqual(userInput)) {
+            if (tasks.get(i).isEqual(newTask)) {
                 return true;
             }
         }
@@ -78,17 +78,19 @@ public class TaskList {
      */
     public Task addTodo(String userInput) throws JMeException.OutOfBounds,
             JMeException.InvalidFormat, JMeException.Duplicates {
+        // Format validation is type-specific (differing delimiters), so it is not extracted into a shared method.
         if (taskCount >= MAX_TASKS) {
             throw new JMeException.OutOfBounds();
         }
         if (userInput.isEmpty()) {
             throw new JMeException.InvalidFormat();
         }
-        if (isDuplicate(userInput)) {
+
+        Task task = new Todo(userInput.trim());
+        if (isDuplicate(task)) {
             throw new JMeException.Duplicates();
         }
 
-        Task task = new Todo(userInput);
         tasks.add(task);
         taskCount++;
         return task;
@@ -115,21 +117,28 @@ public class TaskList {
         if (deadline.length != 2) {
             throw new JMeException.InvalidFormat();
         }
-        if (isDuplicate(userInput)) {
-            throw new JMeException.Duplicates();
-        }
 
         String description = deadline[0].trim();
         String dueTime = deadline[1].trim();
 
+        if (description.isEmpty() || dueTime.isEmpty()) {
+            throw new JMeException.InvalidFormat();
+        }
+
+        Task task;
         try {
-            Task task = new Deadline(description, dueTime);
-            tasks.add(task);
-            taskCount++;
-            return task;
+            task = new Deadline(description, dueTime);
         } catch (DateTimeParseException e) {
             throw new JMeException.InvalidFormat();
         }
+
+        if (isDuplicate(task)) {
+            throw new JMeException.Duplicates();
+        }
+
+        tasks.add(task);
+        taskCount++;
+        return task;
     }
 
     /**
@@ -149,17 +158,21 @@ public class TaskList {
         }
 
         String[] event = userInput.split("/", 3);
-        if (event.length != 3) {
+        if (event.length != 3 || !event[1].trim().startsWith("from") || !event[2].trim().startsWith("to")) {
             throw new JMeException.InvalidFormat();
-        }
-        if (isDuplicate(userInput)) {
-            throw new JMeException.Duplicates();
         }
 
         String description = event[0].trim();
         String startTime = event[1].replace("from", "").trim();
         String endTime = event[2].replace("to", "").trim();
+        if (description.isEmpty() || startTime.isEmpty() || endTime.isEmpty()) {
+            throw new JMeException.InvalidFormat();
+        }
+
         Task task = new Event(description, startTime, endTime);
+        if (isDuplicate(task)) {
+            throw new JMeException.Duplicates();
+        }
         tasks.add(task);
         taskCount++;
         return task;
@@ -199,7 +212,7 @@ public class TaskList {
     }
 
     /**
-     * Searches for tasks whose string representation contains the given keyword
+     * Searches for tasks whose descriptions contain the given keyword
      * (case-insensitive).
      *
      * @param keyword The keyword to search for.
@@ -213,7 +226,7 @@ public class TaskList {
         ArrayList<Task> results = new ArrayList<>();
         for (int i = 0; i < taskCount; i++) {
             Task task = tasks.get(i);
-            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(task);
             }
         }

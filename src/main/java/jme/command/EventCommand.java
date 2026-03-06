@@ -1,30 +1,30 @@
-package JMe.command;
+package jme.command;
 
-import JMe.exception.JMeException;
-import JMe.task.Task;
-import JMe.task.TaskList;
-import JMe.storage.Storage;
-import JMe.ui.Ui;
+import jme.exception.JMeException;
+import jme.task.Task;
+import jme.task.TaskList;
+import jme.storage.Storage;
+import jme.ui.Ui;
 
 /**
- * Command to add a new Deadline task.
+ * Command to add a new Event task.
  */
-public class DeadlineCommand extends Command {
+public class EventCommand extends Command {
     private String arguments;
 
     /**
-     * Constructs a DeadlineCommand with the given arguments.
+     * Constructs an EventCommand with the given arguments.
      *
-     * @param arguments The raw input containing the description and due date.
+     * @param arguments The raw input containing the description, start time, and end time.
      */
-    public DeadlineCommand(String arguments) {
+    public EventCommand(String arguments) {
         this.arguments = arguments;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            Task task = tasks.addDeadline(arguments);
+            Task task = tasks.addEvent(arguments);
             storage.save(tasks.getTasks());
             Ui.printTaskAdded(task, tasks.getTaskCount());
         } catch (JMeException.OutOfBounds e) {
@@ -32,7 +32,7 @@ public class DeadlineCommand extends Command {
         } catch (JMeException.Duplicates e) {
             Ui.printMessage("There already exists such task.");
         } catch (JMeException.InvalidFormat e) {
-            Ui.printMessage("Invalid format: \"deadline (__) /by (yyyy-MM-dd HHmm)\"");
+            Ui.printMessage("Invalid format: \"event (__) /from (__) /to (__)\"");
         }
     }
 }

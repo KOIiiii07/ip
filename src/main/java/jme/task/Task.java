@@ -1,4 +1,4 @@
-package JMe.task;
+package jme.task;
 
 /**
  * Abstract base class representing a task in JMe.
@@ -11,7 +11,7 @@ public abstract class Task {
     /**
      * Constructs a Task with the given description. The task is initially not done.
      *
-     * @param description Description of the task.
+     * @param description The description of the task.
      */
     public Task(String description) {
         this.description = description;
@@ -21,7 +21,7 @@ public abstract class Task {
     /**
      * Sets the completion status of this task.
      *
-     * @param isDone Status of the task
+     * @param isDone The status of the task
      */
     public void setDone(boolean isDone) {
         this.isDone = isDone;
@@ -30,10 +30,19 @@ public abstract class Task {
     /**
      * Returns the completion status of this task.
      *
-     * @return isDone Status of the task
+     * @return isDone The status of the task
      */
     public boolean getStatus() {
         return this.isDone;
+    }
+
+    /**
+     * Returns the description of this task.
+     *
+     * @return The description of this task.
+     */
+    public String getDescription() {
+        return this.description;
     }
 
     /**
@@ -44,19 +53,19 @@ public abstract class Task {
     public abstract String toString();
 
     /**
-     * Returns a pipe-delimited string representation of this task for file storage.
+     * Returns a string representation of this task in a format suitable for file storage.
      *
-     * @return Formatted string suitable for saving to a file.
+     * @return String representation of the task for saving to a file.
      */
-    public String toFileString() {return this.description;}
+    public abstract String toFileString();
 
     /**
-     * Checks whether this task is equal to a task described by the given user input string.
+     * Checks whether this task is equal to another task.
      *
-     * @param task The user input string to compare against.
-     * @return Status of task whether it has duplicates.
+     * @param other The task to compare against.
+     * @return Whether the two tasks are considered equal.
      */
-    public boolean isEqual(String task) {
-        return (this.description.equals(task));
+    public boolean isEqual(Task other) {
+        return this.description.equals(other.description);
     }
 }

@@ -1,9 +1,9 @@
-package JMe.task;
+package jme.task;
 
 /**
  * Represents a todo task with no associated date or time.
  */
-public class Todo extends Task{
+public class Todo extends Task {
 
     /**
      * Constructs a Todo with the given description.
@@ -23,5 +23,14 @@ public class Todo extends Task{
     public String toString() {
         String doneMarker = (this.isDone ? "X" : " ");
         return "[T]" + "[" + doneMarker + "] " + this.description;
+    }
+
+    @Override
+    public boolean isEqual(Task other) {
+        if (!(other instanceof Todo)) {
+            return false;
+        }
+        Todo otherTodo = (Todo) other;
+        return this.description.equals(otherTodo.description);
     }
 }

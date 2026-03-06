@@ -1,10 +1,10 @@
-package JMe;
+package jme;
 
-import JMe.command.Command;
-import JMe.task.TaskList;
-import JMe.storage.Storage;
-import JMe.parser.Parser;
-import JMe.ui.Ui;
+import jme.command.Command;
+import jme.task.TaskList;
+import jme.storage.Storage;
+import jme.parser.Parser;
+import jme.ui.Ui;
 
 import java.io.IOException;
 

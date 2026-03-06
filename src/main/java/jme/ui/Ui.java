@@ -1,6 +1,6 @@
-package JMe.ui;
+package jme.ui;
 
-import JMe.task.Task;
+import jme.task.Task;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -15,6 +15,21 @@ public class Ui {
     private final Scanner scanner;
 
     /**
+     * Prints a list of tasks with a custom header, enclosed by horizontal lines.
+     *
+     * @param header    The header message to display above the task list.
+     * @param tasks     The list of tasks to display.
+     * @param taskCount The number of tasks in the list.
+     */
+    private static void printTasksWithHeader(String header, ArrayList<Task> tasks, int taskCount) {
+        System.out.println(HORIZONTAL_LINE + "\n" + header);
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println((i + 1) + "." + tasks.get(i).toString());
+        }
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    /**
      * Constructs a Ui instance with a Scanner for reading standard input.
      */
     public Ui() {
@@ -27,7 +42,7 @@ public class Ui {
      * @return The trimmed user input string.
      */
     public String readCommand() {
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     /**
@@ -109,11 +124,7 @@ public class Ui {
      * @param taskCount The number of tasks in the list.
      */
     public static void printTaskList(ArrayList<Task> tasks, int taskCount) {
-        System.out.println(HORIZONTAL_LINE + "\nHere are your tasks:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i+1) + "." + tasks.get(i).toString());
-        }
-        System.out.println(HORIZONTAL_LINE);
+        printTasksWithHeader("Here are your tasks:", tasks, taskCount);
     }
 
     /**
@@ -123,10 +134,6 @@ public class Ui {
      * @param taskCount The number of matching tasks.
      */
     public static void printFindTasks(ArrayList<Task> tasks, int taskCount) {
-        System.out.println(HORIZONTAL_LINE + "\nHere are your matching tasks:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i+1) + "." + tasks.get(i).toString());
-        }
-        System.out.println(HORIZONTAL_LINE);
+        printTasksWithHeader("Here are your matching tasks:", tasks, taskCount);
     }
 }

@@ -1,6 +1,6 @@
-package JMe.parser;
+package jme.parser;
 
-import JMe.command.*;
+import jme.command.*;
 
 /**
  * Parses user input strings and returns the corresponding Command object.

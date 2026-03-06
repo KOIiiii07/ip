@@ -1,10 +1,10 @@
-package JMe.command;
+package jme.command;
 
-import JMe.exception.JMeException;
-import JMe.task.Task;
-import JMe.task.TaskList;
-import JMe.storage.Storage;
-import JMe.ui.Ui;
+import jme.exception.JMeException;
+import jme.task.Task;
+import jme.task.TaskList;
+import jme.storage.Storage;
+import jme.ui.Ui;
 
 /**
  * Command to delete a task by its displayed index.

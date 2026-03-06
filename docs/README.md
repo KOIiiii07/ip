@@ -1,8 +1,8 @@
-# JMe User Guide
+# jme User Guide
 
 ![Java](https://img.shields.io/badge/Java-17+-blue)
 
-JMe is a command-line task management chatbot that helps you keep track of your todos, deadlines, and events. Tasks are saved automatically, so your list is always there when you come back.
+jme is a command-line task management chatbot that helps you keep track of your todos, deadlines, and events. Tasks are saved automatically, so your list is always there when you come back.
 ```
 Hello! I'm JMe!
       _ __  __
